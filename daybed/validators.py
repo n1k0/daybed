@@ -1,5 +1,4 @@
 from functools import partial
-import datetime
 import json
 
 import colander
@@ -38,21 +37,7 @@ def schema_validator(request):
 
 def validate_against_schema(request, schema, data):
     try:
-        if not data:
-            request.data_clean = {}
-        else:
-            request.data_clean = schema.deserialize(data)
-
-            # Handle special cases to have data_clean to be JSON compliant
-            for key in request.data_clean:
-                value = request.data_clean[key]
-                if value == colander.null:
-                    value = None
-                elif isinstance(value, datetime.datetime) or \
-                        isinstance(value, datetime.date):
-                    value = str(value)
-                request.data_clean[key] = value
-
+        request.data_clean = schema.deserialize(data) if data else {}
     except colander.Invalid, e:
         for error in e.children:
             # here we transform the errors we got from colander into cornice
