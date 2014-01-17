@@ -40,8 +40,7 @@ REQUIREMENTS = ['setuptools',
                 'cornice',
                 'colander',
                 'pyramid_persona',
-                'pyramid_multiauth',
-                'pyramid_mako']
+                'pyramid_multiauth']
 DEPENDENCY_LINKS = []
 ENTRY_POINTS = {
     'paste.app_factory': [

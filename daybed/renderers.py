@@ -41,13 +41,15 @@ class GeoJSON(JSON):
         # Supported geometry types
         mapping = {'point': 'Point',
                    'line': 'Linestring',
-                   'polygon': 'Polygon'}
+                   'polygon': 'Polygon',
+                   'geojson': 'Geometry'}
         # Gather all geometry fields for this definition
         geom_fields = dict()
         for field in definition['fields']:
+            field_name = field['name']
+            field_type = field['type']
             if field['type'] in mapping.keys():
-                geom_fields[field['name']] = mapping.get(field['type'],
-                                                         field['type'])
+                geom_fields[field_name] = mapping.get(field_type, field_type)
         return geom_fields
 
     def _buildFeature(self, geom_fields, record):

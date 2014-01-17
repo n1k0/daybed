@@ -25,7 +25,6 @@ from pyramid.security import (
 )
 from pyramid.settings import aslist
 
-from pyramid_persona.utils import button, js
 from pyramid_persona.views import login, logout
 from pyramid_multiauth import MultiAuthenticationPolicy
 
@@ -54,7 +53,6 @@ def main(global_config, **settings):
 
     config = Configurator(settings=settings, root_factory=RootFactory)
     config.include("cornice")
-    config.include('pyramid_mako')
 
     ## ACL management
 
@@ -86,15 +84,13 @@ def main(global_config, **settings):
     config.registry['persona.request_params'] = json.dumps(request_params)
 
     # Login and logout views.
-    config.add_route('persona', '/persona')
-    config.add_view(home, route_name='persona', renderer='home.mako')
-
     login_route = settings.get('persona.login_route', 'login')
     config.registry['persona.login_route'] = login_route
     login_path = settings.get('persona.login_path', '/login')
     config.add_route(login_route, login_path)
     config.add_view(login, route_name=login_route, check_csrf=True,
-                    renderer='json', permission=NO_PERMISSION_REQUIRED)
+                    renderer='json',
+                    permission=NO_PERMISSION_REQUIRED)
 
     logout_route = settings.get('persona.logout_route', 'logout')
     config.registry['persona.logout_route'] = logout_route
@@ -103,10 +99,6 @@ def main(global_config, **settings):
     config.add_view(logout, route_name=logout_route, check_csrf=True,
                     renderer='json',
                     permission=NO_PERMISSION_REQUIRED)
-
-    config.add_request_method(button, 'persona_button', reify=True)
-    config.add_request_method(js, 'persona_js', reify=True)
-
     # Unauthorized view
     config.add_forbidden_view(unauthorized_view)
 

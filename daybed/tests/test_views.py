@@ -23,9 +23,6 @@ class DaybedViewsTest(BaseWebTest):
         self.assertDictEqual({'version': VERSION,
                               'daybed': 'hello'}, response.json)
 
-    def test_persona(self):
-        self.app.get('/persona', headers=self.headers)
-
     def test_fields_are_listed(self):
         response = self.app.get('/fields')
         fields = response.json
